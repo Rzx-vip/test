@@ -1,0 +1,28 @@
+{
+  "id": 8252681777,
+  "user_ke": 2,
+  "registered_at": "20 Agustus 2026 pukul 15.58.48 WIB",
+  "total_ubot_terkoneksi": 2,
+  "role": "User Free",
+  "role_expired_at": null,
+  "ubot_data": [
+    {
+      "api_id": 39135863,
+      "api_hash": "5852fa0d3c6b2990201865d68e5bcb37",
+      "phone": "6282260040478",
+      "session_string": "1BQANOTEuMTA4LjU2LjExMgG7UaHhx1P+JtFnBpnzEhWspXJspisIe9cPTjyP9vT+dDt5BnBYesm4QsgnKvXfbtqPML/d1e2ug9jPCF98Vd5zbYvcmstWSTQIGRKAsXgVFB9RSJr8Wl23fhx3UsRiL3hGc+wQmXRmbCCe6DsUyfs2/lf+c5YZkMiVBWiFX9tghOlvTb0JAS5Nq7cEKH9Tl/W5viI/RNkcLzoZZP4MNl20nn19viGAua04Dybc3j25370fNxdwvzktA5Kbfa1huEV/GoDkmmp3oi7QXngrXF7u3PZP55y7OPupnx2JxoJvIDsAbwFlgFjjppC4yeSKBvurz4hRCOlUaHWHGc3OZEn5GA==",
+      "connected_at": "20 Agustus 2026 pukul 18.40.23 WIB"
+    },
+    {
+      "api_id": 39135863,
+      "api_hash": "5852fa0d3c6b2990201865d68e5bcb37",
+      "phone": "6282260040478",
+      "session_string": "1BQANOTEuMTA4LjU2LjExMgG7PKZQZbc5AzsJxI2ZQaM0sIqvUezdZwaYE9j7dU3UfjS6KUGxKS9g6t1NMUmYqXyP0jhttEUvcEp4qcLbgMx04albdDf7ulEGg32V3/LCk+jY9dsFduFiKkA2QCzNCbpXn41Z4PmNWD2eaGLk8rSmpW8oktUN1cxVN3tG2cy8mxovndr6Dei6uGejDsOycRqNZEcU9sznbMdHaxWAtoGTA4qwVIkVym3GWpgQ7gg927ZU1Qa8BfuBxVjMcx9Z8iibDPPXXk6yCtH4VHAgDcFuNxh+LGPOZwAl/0NnAL3JxyJK7wONW1sc7XtNngps46dImZzjqS0CDb8bTBSOlIZbCA==",
+      "connected_at": "20 Agustus 2026 pukul 18.48.47 WIB"
+    }
+  ],
+  "username": "rzxvnx",
+  "first_name": "RezzX",
+  "last_name": "",
+  "full_name": "RezzX"
+}
