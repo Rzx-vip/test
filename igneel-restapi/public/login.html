@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#100d1f" />
+  <meta name="description" content="Igneel RestAPI — dark creator authentication experience." />
+  <title>Igneel RestAPI • Login</title>
+  <style>
+    :root{
+      --bg:#080711;
+      --panel:rgba(18,15,31,.78);
+      --panel-2:rgba(31,25,52,.72);
+      --text:#f8f5ff;
+      --muted:#a9a1bd;
+      --line:rgba(255,255,255,.10);
+      --gold:#ffcc66;
+      --gold-2:#ff9e45;
+      --violet:#8b5cf6;
+      --danger:#ff6b81;
+      --success:#64e6a5;
+      --shadow:0 32px 90px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#21173f 0,#0b0913 38%,#06060a 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
+    body{min-height:100vh}
+    button,input{font:inherit}
+    #space,#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+    #space{opacity:.92}
+    #fx{z-index:2}
+    .grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.10;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+    .vignette{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.62) 100%)}
+    .wrap{position:relative;z-index:8;min-height:100vh;display:grid;place-items:center;padding:26px}
+    .shell{width:min(1080px,100%);display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:stretch}
+    .hero,.auth{border:1px solid var(--line);background:linear-gradient(145deg,rgba(28,22,47,.82),rgba(10,9,17,.82));backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:var(--shadow);border-radius:30px;overflow:hidden}
+    .hero{position:relative;padding:54px 50px;min-height:620px;display:flex;flex-direction:column;justify-content:space-between}
+    .hero:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;top:-90px;background:radial-gradient(circle,rgba(255,169,77,.28),transparent 70%);filter:blur(8px)}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;color:#fff}
+    .brand-mark{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#251507;box-shadow:0 10px 32px rgba(255,171,83,.28)}
+    .brand-mark svg{width:23px;height:23px}
+    h1{margin:30px 0 16px;font-size:clamp(42px,6vw,80px);line-height:.95;letter-spacing:-.065em;max-width:700px}
+    .gradient{background:linear-gradient(90deg,#fff,var(--gold),#ffb66a,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{max-width:520px;color:var(--muted);line-height:1.8;font-size:1rem}
+    .badges{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+    .badge{padding:9px 12px;border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:999px;color:#d8d0e8;font-size:.78rem}
+    .tip{display:flex;gap:12px;align-items:flex-start;color:#c9c1d8;font-size:.88rem;line-height:1.55;max-width:500px}
+    .dot{margin-top:6px;width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 16px var(--success);flex:none}
+    .auth{padding:30px;min-height:620px;display:flex;flex-direction:column;justify-content:center}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(0,0,0,.22);padding:5px;border:1px solid var(--line);border-radius:16px;margin-bottom:24px}
+    .tab{border:0;background:transparent;color:var(--muted);padding:12px;border-radius:12px;cursor:pointer;font-weight:800;transition:.25s}
+    .tab.active{background:linear-gradient(135deg,rgba(255,204,102,.18),rgba(139,92,246,.18));color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+    .panel{display:none}.panel.active{display:block;animation:rise .42s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    h2{margin:0 0 8px;font-size:1.55rem;letter-spacing:-.03em}.panel-desc{margin:0 0 24px;color:var(--muted);font-size:.9rem;line-height:1.6}
+    .field{margin:0 0 15px}.label{display:flex;justify-content:space-between;align-items:center;margin:0 0 8px;font-size:.82rem;color:#ddd6eb;font-weight:700}
+    .input-wrap{position:relative}.input{width:100%;border:1px solid var(--line);background:rgba(7,6,12,.64);color:#fff;border-radius:15px;padding:14px 45px 14px 15px;outline:none;transition:.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+    .input:focus{border-color:rgba(255,204,102,.60);box-shadow:0 0 0 4px rgba(255,204,102,.08),inset 0 1px 0 rgba(255,255,255,.03)}
+    .toggle{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;background:transparent;color:#9e95af;cursor:pointer;border-radius:10px}.toggle:hover{background:rgba(255,255,255,.06);color:#fff}
+    .submit{width:100%;border:0;border-radius:15px;padding:14px 16px;margin-top:6px;cursor:pointer;font-weight:900;color:#251507;background:linear-gradient(110deg,#ffe09a,#ffc45e 45%,#ff9a55);box-shadow:0 16px 34px rgba(255,166,79,.20);transition:.22s;position:relative;overflow:hidden}
+    .submit:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0 30%,rgba(255,255,255,.35) 48%,transparent 66%);transform:translateX(-120%);transition:.7s}.submit:hover:before{transform:translateX(120%)}.submit:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(255,166,79,.28)}.submit:disabled{opacity:.65;cursor:wait;transform:none}
+    .form-footer{margin-top:16px;text-align:center;color:var(--muted);font-size:.8rem;line-height:1.5}.switch{border:0;background:none;color:#ffd67a;font-weight:800;cursor:pointer;padding:0}.switch:hover{text-decoration:underline}
+    .toast{position:fixed;z-index:20;left:50%;top:26px;transform:translate(-50%,-140%);min-width:min(450px,calc(100vw - 32px));padding:14px 18px;border-radius:14px;border:1px solid var(--line);background:rgba(20,17,30,.88);backdrop-filter:blur(18px);box-shadow:0 20px 50px rgba(0,0,0,.35);display:flex;gap:11px;align-items:center;transition:.38s cubic-bezier(.2,.75,.2,1)}
+    .toast.show{transform:translate(-50%,0)}.toast.success{border-color:rgba(100,230,165,.28)}.toast.error{border-color:rgba(255,107,129,.30)}.toast-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.07);flex:none}.toast-text{font-size:.9rem;line-height:1.4}
+    .server-status{display:flex;align-items:center;gap:8px;color:#a9a1bd;font-size:.75rem;margin-top:16px;justify-content:center}.status-light{width:7px;height:7px;border-radius:50%;background:#8c8495}.status-light.ok{background:var(--success);box-shadow:0 0 12px rgba(100,230,165,.65)}
+    .terms{font-size:.72rem;color:#777082;text-align:center;margin-top:16px;line-height:1.5}.terms b{color:#a49ab5}
+    @media (max-width:900px){html,body{overflow:auto}.shell{grid-template-columns:1fr;max-width:700px}.hero{min-height:360px;padding:34px}.auth{min-height:auto}.hero h1{font-size:clamp(44px,11vw,68px)}}
+    @media (max-width:560px){.wrap{padding:12px}.hero{display:none}.auth{border-radius:24px;padding:22px;min-height:calc(100vh - 24px);justify-content:center}.tabs{margin-bottom:22px}}
+    @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <canvas id="space"></canvas>
+  <canvas id="fx"></canvas>
+  <div class="grain"></div><div class="vignette"></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><div class="toast-icon" id="toastIcon">✓</div><div class="toast-text" id="toastText"></div></div>
+
+  <main class="wrap">
+    <section class="shell">
+      <div class="hero">
+        <div>
+          <div class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14.5 8.4 9l2.7 2.4L16 5l4 4-5 3.5 1.5 4.5-5.3-2-3.8 3.4L4 14.5Z"/><path d="M13.5 8.2 15 3.8"/></svg></span> IGNEEL RESTAPI</div>
+          <h1>Support <span class="gradient">creator energy.</span></h1>
+          <p class="sub">Portal autentikasi bergaya dark creator platform untuk project kamu. Fokus pada pengalaman cepat, aman, dan berasa premium.</p>
+          <div class="badges"><span class="badge">MongoDB Atlas</span><span class="badge">Express API</span><span class="badge">HTTP-only Cookie</span><span class="badge">Dragon FX ×15</span></div>
+        </div>
+        <div class="tip"><span class="dot"></span><span>Arahkan kursor ke mana pun. Naga akan mengejar arah pointer dengan badan 15 segmen dan semburan api saat bergerak.</span></div>
+      </div>
+
+      <section class="auth">
+        <div class="tabs" role="tablist">
+          <button class="tab active" id="loginTab" type="button">Login</button>
+          <button class="tab" id="registerTab" type="button">Buat akun</button>
+        </div>
+
+        <div class="panel active" id="loginPanel">
+          <h2>Selamat datang kembali</h2>
+          <p class="panel-desc">Masuk menggunakan username atau email yang sudah terdaftar.</p>
+          <form id="loginForm" novalidate>
+            <div class="field"><div class="label"><label for="loginIdentity">Username / Email</label></div><input class="input" id="loginIdentity" autocomplete="username" placeholder="mis. ignis / you@email.com" required /></div>
+            <div class="field"><div class="label"><label for="loginPassword">Password</label></div><div class="input-wrap"><input class="input" id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password" required /><button class="toggle" type="button" data-target="loginPassword" aria-label="Tampilkan password">◉</button></div></div>
+            <button class="submit" id="loginSubmit" type="submit">Masuk ke Dashboard</button>
+          </form>
+          <div class="form-footer">Belum punya akun? <button class="switch" type="button" data-switch="register">Daftar sekarang</button></div>
+          <div class="server-status"><span class="status-light" id="statusLight"></span><span id="statusText">Memeriksa koneksi API…</span></div>
+        </div>
+
+        <div class="panel" id="registerPanel">
+          <h2>Buat akun baru</h2>
+          <p class="panel-desc">Akun disimpan di MongoDB dan password tidak pernah disimpan sebagai teks biasa.</p>
+          <form id="registerForm" novalidate>
+            <div class="field"><div class="label"><label for="registerUsername">Username</label></div><input class="input" id="registerUsername" autocomplete="username" placeholder="3–24 karakter" required /></div>
+            <div class="field"><div class="label"><label for="registerEmail">Email</label></div><input class="input" id="registerEmail" type="email" autocomplete="email" placeholder="you@email.com" required /></div>
+            <div class="field"><div class="label"><label for="registerPassword">Password</label></div><div class="input-wrap"><input class="input" id="registerPassword" type="password" autocomplete="new-password" placeholder="Minimal 8 karakter" required /><button class="toggle" type="button" data-target="registerPassword" aria-label="Tampilkan password">◉</button></div></div>
+            <div class="field"><div class="label"><label for="registerPassword2">Ulangi password</label></div><div class="input-wrap"><input class="input" id="registerPassword2" type="password" autocomplete="new-password" placeholder="Ulangi password" required /><button class="toggle" type="button" data-target="registerPassword2" aria-label="Tampilkan password">◉</button></div></div>
+            <button class="submit" id="registerSubmit" type="submit">Buat Akun</button>
+          </form>
+          <div class="form-footer">Sudah punya akun? <button class="switch" type="button" data-switch="login">Kembali ke login</button></div>
+          <div class="terms">Dengan membuat akun, kamu menyetujui penggunaan layanan project <b>Igneel RestAPI</b>.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const toast = $('#toast'), toastText = $('#toastText'), toastIcon = $('#toastIcon');
+  let toastTimer;
+
+  function showToast(message, type='success') {
+    clearTimeout(toastTimer);
+    toastText.textContent = message;
+    toast.className = `toast show ${type}`;
+    toastIcon.textContent = type === 'success' ? '✓' : '×';
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3600);
+  }
+
+  function setPanel(which) {
+    const login = which === 'login';
+    $('#loginPanel').classList.toggle('active', login);
+    $('#registerPanel').classList.toggle('active', !login);
+    $('#loginTab').classList.toggle('active', login);
+    $('#registerTab').classList.toggle('active', !login);
+  }
+
+  $('#loginTab').addEventListener('click', () => setPanel('login'));
+  $('#registerTab').addEventListener('click', () => setPanel('register'));
+  $$('[data-switch]').forEach(btn => btn.addEventListener('click', () => setPanel(btn.dataset.switch)));
+
+  $$('.toggle').forEach(btn => btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.target);
+    el.type = el.type === 'password' ? 'text' : 'password';
+    btn.textContent = el.type === 'password' ? '◉' : '◌';
+  }));
+
+  function setLoading(button, state, text) {
+    button.disabled = state;
+    if (text) button.textContent = text;
+    else button.textContent = button.id === 'loginSubmit' ? 'Masuk ke Dashboard' : 'Buat Akun';
+  }
+
+  async function api(url, options={}) {
+    const res = await fetch(url, { credentials: 'same-origin', ...options, headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
+    let body = {};
+    try { body = await res.json(); } catch {}
+    if (!res.ok) throw new Error(body.message || 'Terjadi kesalahan pada server.');
+    return body;
+  }
+
+  $('#registerForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const username = $('#registerUsername').value.trim();
+    const email = $('#registerEmail').value.trim();
+    const password = $('#registerPassword').value;
+    const password2 = $('#registerPassword2').value;
+
+    if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) return showToast('Username 3–24 karakter dan hanya boleh huruf, angka, underscore.', 'error');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showToast('Format email belum valid.', 'error');
+    if (password.length < 8) return showToast('Password minimal 8 karakter.', 'error');
+    if (password !== password2) return showToast('Konfirmasi password tidak cocok.', 'error');
+
+    const button = $('#registerSubmit');
+    setLoading(button, true, 'Membuat akun…');
+    try {
+      const data = await api('/api/auth/register', { method: 'POST', body: JSON.stringify({ username, email, password }) });
+      showToast(`Registrasi sukses! Halo, ${data.user.username}. Silakan login.`, 'success');
+      // Langsung isi form login tanpa localStorage sehingga password hanya hidup di tab ini.
+      $('#loginIdentity').value = data.user.username;
+      $('#loginPassword').value = password;
+      $('#registerPassword').value = '';
+      $('#registerPassword2').value = '';
+      setPanel('login');
+      $('#loginPassword').focus();
+    } catch (error) {
+      showToast(error.message, 'error');
+    } finally {
+      setLoading(button, false);
+    }
+  });
+
+  $('#loginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const identity = $('#loginIdentity').value.trim();
+    const password = $('#loginPassword').value;
+    if (!identity || !password) return showToast('Username/email dan password wajib diisi.', 'error');
+
+    const button = $('#loginSubmit');
+    setLoading(button, true, 'Memverifikasi…');
+    try {
+      const data = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ identity, password }) });
+      showToast(`Login sukses! Selamat datang, ${data.user.username}!`, 'success');
+      setTimeout(() => { window.location.replace('/dashboard.html'); }, 700);
+    } catch (error) {
+      showToast(error.message, 'error');
+    } finally {
+      setLoading(button, false);
+    }
+  });
+
+  async function checkApi() {
+    const light = $('#statusLight'), text = $('#statusText');
+    try {
+      const data = await fetch('/api/health', { cache: 'no-store' }).then(r => r.json());
+      if (data.success && data.database === 'connected') { light.classList.add('ok'); text.textContent = 'API online • MongoDB connected'; }
+      else text.textContent = 'API online • Database belum terhubung';
+    } catch { text.textContent = 'API belum online • jalankan server'; }
+  }
+  checkApi();
+
+  // ===== PARTICLE SPACE =====
+  const space = $('#space'), sctx = space.getContext('2d');
+  const fx = $('#fx'), ctx = fx.getContext('2d');
+  const mouse = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, active: false };
+  let particles = [], stars = [];
+
+  function resize() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    for (const c of [space, fx]) { c.width = innerWidth * dpr; c.height = innerHeight * dpr; c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px'; c.getContext('2d').setTransform(dpr,0,0,dpr,0,0); }
+    const count = Math.min(120, Math.floor(innerWidth * innerHeight / 13000));
+    particles = Array.from({length: count}, () => ({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: Math.random()*1.7+.25, a: Math.random()*.6+.18, v: Math.random()*.18+.03, tw: Math.random()*Math.PI*2 }));
+    stars = Array.from({length: Math.min(160, Math.floor(innerWidth*innerHeight/7000))}, () => ({ x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.2+.2,a:Math.random()*.6+.1,tw:Math.random()*6.28 }));
+  }
+  addEventListener('resize', resize, { passive:true });
+  addEventListener('pointermove', e => { mouse.tx=e.clientX; mouse.ty=e.clientY; mouse.active=true; }, {passive:true});
+
+  function drawSpace(t) {
+    sctx.clearRect(0,0,innerWidth,innerHeight);
+    const g=sctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,360);g.addColorStop(0,'rgba(255,179,93,.09)');g.addColorStop(1,'rgba(0,0,0,0)');sctx.fillStyle=g;sctx.fillRect(0,0,innerWidth,innerHeight);
+    for (const p of particles){p.y+=p.v;p.tw+=.012;if(p.y>innerHeight+6)p.y=-6;const a=p.a*(.65+.35*Math.sin(p.tw));sctx.beginPath();sctx.arc(p.x,p.y,p.r,0,Math.PI*2);sctx.fillStyle=`rgba(255,215,150,${a})`;sctx.fill()}
+    for (const st of stars){st.tw+=.008;const a=st.a*(.55+.45*Math.sin(st.tw));sctx.beginPath();sctx.arc(st.x,st.y,st.r,0,Math.PI*2);sctx.fillStyle=`rgba(210,190,255,${a})`;sctx.fill()}
+  }
+
+  // ===== 15-SEGMENT DRAGON CURSOR =====
+  const dragon = Array.from({length:15}, (_,i)=>({x:mouse.x-i*12,y:mouse.y}));
+  const sparks=[];
+  let last=performance.now();
+
+  function drawDragon(t){
+    mouse.x += (mouse.tx-mouse.x)*.15; mouse.y += (mouse.ty-mouse.y)*.15;
+    // Follow chain; each body segment tries to stay a fixed distance from the previous one.
+    dragon[0].x += (mouse.x-dragon[0].x)*.40; dragon[0].y += (mouse.y-dragon[0].y)*.40;
+    for(let i=1;i<dragon.length;i++){
+      const a=dragon[i-1], b=dragon[i], dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy)||1, gap=13-(i*.16);
+      b.x += (a.x - b.x) * .34;
+      b.y += (a.y - b.y) * .34;
+      if(d>gap){ b.x += dx/d*(d-gap)*.23; b.y += dy/d*(d-gap)*.23; }
+    }
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    if(!mouse.active)return;
+
+    const head=dragon[0], neck=dragon[1];
+    const angle=Math.atan2(head.y-neck.y,head.x-neck.x);
+    // Glow trail
+    ctx.save();ctx.globalCompositeOperation='lighter';
+    for(let i=dragon.length-1;i>=0;i--){const p=dragon[i], r=10-i*.34;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(2,r+7),0,Math.PI*2);ctx.fillStyle=`rgba(255,145,58,${.012+.018*(15-i)})`;ctx.fill()}
+    ctx.restore();
+
+    // Body, 15 visible segments.
+    for(let i=dragon.length-1;i>=1;i--){
+      const p=dragon[i], r=Math.max(2.6,10-i*.38), hue=i%3===0?'#ffb454':'#9b6aff';
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fillStyle=hue;ctx.shadowBlur=14;ctx.shadowColor='rgba(255,147,62,.25)';ctx.fill();ctx.shadowBlur=0;
+      ctx.beginPath();ctx.arc(p.x-r*.25,p.y-r*.3,r*.35,0,Math.PI*2);ctx.fillStyle='rgba(255,240,190,.28)';ctx.fill();
+    }
+
+    // Wings
+    ctx.save();ctx.translate(head.x,head.y);ctx.rotate(angle);
+    ctx.beginPath();ctx.moveTo(-3,-3);ctx.lineTo(-11,-21);ctx.lineTo(-22,-10);ctx.lineTo(-7,1);ctx.closePath();ctx.fillStyle='rgba(139,92,246,.62)';ctx.fill();
+    ctx.beginPath();ctx.moveTo(-3,3);ctx.lineTo(-10,20);ctx.lineTo(-22,10);ctx.lineTo(-7,-1);ctx.closePath();ctx.fillStyle='rgba(139,92,246,.52)';ctx.fill();
+    // Head
+    ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(-5,-12);ctx.lineTo(-9,0);ctx.lineTo(-5,12);ctx.closePath();ctx.fillStyle='#ffb85c';ctx.shadowBlur=22;ctx.shadowColor='rgba(255,170,75,.45)';ctx.fill();ctx.shadowBlur=0;
+    // Horns
+    ctx.beginPath();ctx.moveTo(-4,-8);ctx.lineTo(-1,-20);ctx.lineTo(3,-9);ctx.fillStyle='#f4debb';ctx.fill();ctx.beginPath();ctx.moveTo(-4,8);ctx.lineTo(-1,20);ctx.lineTo(3,9);ctx.fill();
+    // Eye
+    ctx.fillStyle='#26150b';ctx.beginPath();ctx.arc(5,-4.5,2.1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(5,4.5,2.1,0,Math.PI*2);ctx.fill();
+    // Fire breath
+    const fireLen=18+Math.sin(t*.012)*5;
+    ctx.beginPath();ctx.moveTo(14,-4);ctx.quadraticCurveTo(28,0,14+fireLen,0);ctx.quadraticCurveTo(28,4,14,4);ctx.closePath();ctx.fillStyle='rgba(255,122,52,.95)';ctx.fill();
+    ctx.beginPath();ctx.moveTo(16,-2);ctx.quadraticCurveTo(28,0,12+fireLen*.7,0);ctx.quadraticCurveTo(28,2,16,2);ctx.closePath();ctx.fillStyle='rgba(255,231,132,.98)';ctx.fill();
+    ctx.restore();
+
+    // Fire sparks behind the body when pointer moves.
+    const movement=Math.hypot(mouse.tx-mouse.x,mouse.ty-mouse.y);
+    if(movement>2.5 && Math.random()<.65){ sparks.push({x:dragon[7].x,y:dragon[7].y,vx:(Math.random()-.5)*1.7,vy:Math.random()*1.6+.3,life:1,size:Math.random()*2.2+1}) }
+    for(let i=sparks.length-1;i>=0;i--){const sp=sparks[i];sp.x+=sp.vx;sp.y+=sp.vy;sp.life-=.035;ctx.beginPath();ctx.arc(sp.x,sp.y,sp.size*sp.life,0,Math.PI*2);ctx.fillStyle=`rgba(255,${150+Math.floor(80*sp.life)},80,${sp.life})`;ctx.fill();if(sp.life<=0)sparks.splice(i,1)}
+  }
+
+  function loop(t){
+    drawSpace(t);drawDragon(t);last=t;requestAnimationFrame(loop)}
+  resize();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

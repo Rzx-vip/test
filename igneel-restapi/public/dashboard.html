@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Igneel RestAPI • Dashboard</title>
+  <style>
+    :root{--bg:#080711;--panel:#151123;--line:rgba(255,255,255,.1);--text:#fff;--muted:#a59db6;--gold:#ffca67;--violet:#a78bfa}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#241744,#0a0810 48%,#050508);color:var(--text);font-family:Inter,system-ui,sans-serif}.wrap{max-width:980px;margin:auto;padding:30px}.card{border:1px solid var(--line);background:rgba(17,13,28,.82);border-radius:28px;padding:32px;box-shadow:0 30px 80px rgba(0,0,0,.45);backdrop-filter:blur(18px)}h1{font-size:clamp(36px,7vw,68px);margin:0 0 10px;letter-spacing:-.06em}.grad{background:linear-gradient(90deg,#fff,var(--gold),var(--violet));color:transparent;background-clip:text;-webkit-background-clip:text}.muted{color:var(--muted);line-height:1.7}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}.mini{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}.label{font-size:.75rem;color:var(--muted)}.value{font-size:1.15rem;font-weight:800;margin-top:7px}.btn{margin-top:24px;border:0;border-radius:14px;padding:13px 17px;font-weight:900;cursor:pointer;background:linear-gradient(110deg,#ffe39e,#ff9c5b);color:#241608}@media(max-width:700px){.grid{grid-template-columns:1fr}.wrap{padding:15px}.card{padding:24px}}
+  </style>
+</head>
+<body>
+  <main class="wrap"><section class="card">
+    <h1>Welcome, <span class="grad" id="name">Creator</span> 👋</h1>
+    <p class="muted">Kamu berhasil masuk ke dashboard <b>Igneel RestAPI</b>. Ini sengaja dibuat sederhana sebagai fondasi untuk modul Saweria-style berikutnya.</p>
+    <div class="grid"><div class="mini"><div class="label">STATUS</div><div class="value">Authenticated</div></div><div class="mini"><div class="label">DATABASE</div><div class="value" id="db">Checking…</div></div><div class="mini"><div class="label">AUTH</div><div class="value">HTTP-only Cookie</div></div></div>
+    <button class="btn" id="logout">Logout</button>
+  </section></main>
+<script>
+(async()=>{
+  try{const r=await fetch('/api/auth/me',{credentials:'same-origin'});if(!r.ok)throw new Error();const d=await r.json();document.querySelector('#name').textContent=d.user.username;document.querySelector('#db').textContent='MongoDB Connected';}
+  catch{location.replace('/login.html');}
+  document.querySelector('#logout').addEventListener('click',async()=>{await fetch('/api/auth/logout',{method:'POST'});location.replace('/login.html');});
+})();
+</script>
+</body>
+</html>
